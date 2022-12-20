@@ -1,0 +1,99 @@
+{% extends 'apps/parts/base.html' %}
+{% block title %}Blogs{% endblock %}
+{% block main_content %}
+    <div class="container">
+        <div class="category">
+            <div class="row">
+                {% include 'apps/parts/sidebar.html' %}
+                <div class="col-12 col-md-7 col-lg-8 order-md-1">
+                    {% if category %}
+                        <div class="category__header">
+                            <div class="category__header__text">
+                                <a href="{{ url }}?category={{ category.slug }}">{{ category.name }}</a>
+
+                            </div>
+                            <div class="category__header__filter">
+                            </div>
+                        </div>
+                    {% elif owner_post %}
+                        <div class="category__header">
+                            <div class="category__header__text">
+                                <h5>Total blogs that you posted: </h5>
+                            </div>
+                            <div class="category__header__filter">
+                                <h5>{{ user.post_set.count }}</h5>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="category_content">
+                        <div class="col-12">
+                            {% for post in posts %}
+                                <div class="post-card -small -horizontal">
+                                    <a class="card__cover" href="{% url 'post_form_detail' post.slug %}" tabindex="0">
+                                        <img src="{{ post.pic.url }}" alt="">
+                                    </a>
+                                    <div class="card__content">
+                                        {% if post.category.exists %}
+                                            <h5 class="card__content-category">{{ post.category.first.name }}</h5>
+                                        {% endif %}
+                                        <a class="card__content-title" href="{% url 'post_form_detail' post.slug %}">
+                                            {{ post.title }}
+                                        </a>
+                                        {% if owner_post %}
+                                            {% if post.status == 'pending' %}
+                                                <h5><span class="badge bg-warning text-dark">Pending</span></h5>
+                                            {% elif post.status == 'cancel' %}
+                                                <h5><span class="badge bg-danger text-white">Canceled</span></h5>
+                                            {% else %}
+                                                <h5><span class="badge bg-success text-white">Submitted</span></h5>
+
+                                            {% endif %}
+                                        {% endif %}
+                                        <div class="card__content-info">
+                                            <div class="info__time">
+                                                <i class="far fa-clock"></i>
+                                                <p>{{ post.created_at|date:"D m, Y" }}</p>
+                                            </div>
+                                            <div class="info__comment">
+                                                <i class="far fa-comment"></i>
+                                                <p>{{ post.comment_count }}</p>
+                                            </div>
+                                        </div>
+                                        <p class="card__content-description">
+                                            {{ post.content|safe|striptags|truncatechars:100 }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="pagination">
+
+                        {% if page_obj.has_other_pages %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                    {#                                                                        <li class="disabled"><a>&laquo;</a></li>#}
+                                {% endif %}
+                                {% for i in pagination_range %}
+                                    {% if page_obj.number == i %}
+                                        <li class="active"><a>{{ i }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                    {#                                    <li class="disabled"><a>&raquo;</a></li>#}
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
