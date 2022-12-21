@@ -18,26 +18,26 @@ class SearchView(View):
         return JsonResponse(data)
 
 
-# class IndexView(ListView):
-#     queryset = Post.active.first()
-#     context_object_name = 'main_post'
-#     template_name = 'apps/index.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(object_list=object_list, **kwargs)
-#         context['url'] = reverse('category')
-#         context['posts'] = Post.active.all()[1:5]
-#         return context
-
 class IndexView(ListView):
-    queryset = Category.objects.all()
-    context_object_name = 'categories'
+    queryset = Post.active.first()
+    context_object_name = 'main_post'
     template_name = 'apps/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['posts'] = Post.active.all()[:4]
+        context['url'] = reverse('category')
+        context['posts'] = Post.active.all()[1:5]
         return context
+
+# class IndexView(ListView):
+#     queryset = Category.objects.all()
+#     context_object_name = 'categories'
+#     template_name = 'apps/index.html'
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(object_list=object_list, **kwargs)
+#         context['posts'] = Post.active.all()[:4]
+#         return context
 
 
 class PostListView(ListView):
@@ -137,5 +137,7 @@ class GeneratePdf(DetailView):
 
 def entry_not_found(request, exception, template_name='404.html'):
     return render(request, template_name)
+
+
 class InActiveView(TemplateView):
     template_name = 'apps/auth/inactive.html'
