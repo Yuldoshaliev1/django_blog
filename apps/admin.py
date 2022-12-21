@@ -27,12 +27,10 @@ class PostAdmin(ModelAdmin):
 
     change_form_template = 'admin/custom/change_form_post.html'
 
-    # list_editable = ('pic', )
 
     def status_icon(self, obj):
         data = {
             'pending': '''<script src="https://cdn.lordicon.com/fudrjiwc.js"></script><lord-icon src="https://cdn.lordicon.com/uutnmngi.json" trigger="hover" colors="primary:#4be1ec,secondary:#cb5eee" stroke="65" style="width:30px;height:30px"></lord-icon>''',
-            # 'pending': '<i class="fas fa-spinner fa-pulse" style="color: orange; font-size: 1.5em;"></i>',
             'active': '<i class="fa-solid fa-check" style="color: green; font-size: 1.5em;"></i>',
             'cancel': '<i class="fa-solid fa-circle-xmark"  style="color: red; font-size: 1.5em;"></i>'
         }

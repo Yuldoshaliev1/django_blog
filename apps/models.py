@@ -14,12 +14,15 @@ class User(AbstractUser):
     bio = TextField(null=True, blank=True)
     email = EmailField(max_length=255, unique=True)
     is_active = BooleanField(default=False)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-    phone = CharField(validators=[phone_regex], max_length=17, null=True, blank=True)
+    phone = CharField( max_length=25, null=True, blank=True)
 
     @property
     def full_name(self):
         return self.first_name + ' ' + self.first_name
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Userlar'
 
 
 class About(Model):
@@ -27,13 +30,12 @@ class About(Model):
     about = TextField()
     location = CharField(max_length=255)
     email = EmailField(max_length=255)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-    phone = CharField(validators=[phone_regex], max_length=17, blank=True)
+    phone = CharField( max_length=25, blank=True)
     social_accounts = JSONField(null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Site Info'
-        verbose_name_plural = 'Site Info'
+        verbose_name = 'sayt xaqida'
+        verbose_name_plural = 'Sayt xaqida'
 
 
     def __str__(self):
@@ -71,7 +73,8 @@ class Category(Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Categoriya'
+        verbose_name_plural = 'Categoriyalar'
 
 
 class ActivePostsManager(Manager):
@@ -81,9 +84,9 @@ class ActivePostsManager(Manager):
 
 class Post(Model):
     class Status(TextChoices):
-        PENDING = 'pending', 'Pending'
-        ACTIVE = 'active', 'Active'
-        CANCEL = 'cancel', 'Cancel'
+        PENDING = 'pending', 'Kutilmoqda'
+        ACTIVE = 'active', 'Faol'
+        CANCEL = 'cancel', 'qaytarilgan'
 
     title = CharField(max_length=255)
     slug = SlugField(max_length=255, unique=True)
@@ -96,7 +99,7 @@ class Post(Model):
     views = BigIntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        # if not self.slug:
+
         self.slug = slugify(self.title)
         while Post.objects.filter(slug=self.slug).exists():
             slug = Post.objects.filter(slug=self.slug).first().slug
@@ -151,6 +154,7 @@ class Post(Model):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name_plural= 'Postlar'
 
 
 class Comment(Model):
@@ -162,6 +166,9 @@ class Comment(Model):
     def __str__(self):
         return format_html(f'<i>{self.text[:50]}... by {self.author.get_username()}</i>')
 
+    class Meta:
+        verbose_name_plural = 'Komentariyalar'
+
 
 class Contact(Model):
     user = ForeignKey(User, PROTECT)
@@ -171,6 +178,9 @@ class Contact(Model):
 
     def __str__(self):
         return self.subject
+
+    class Meta:
+        verbose_name_plural = 'Kontactlar'
 
 
 class PostViewHistory(Model):
