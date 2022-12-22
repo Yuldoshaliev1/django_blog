@@ -1,6 +1,6 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
+
 from django.db.models import ImageField, TextField, EmailField, BooleanField, CharField, Model, JSONField, SlugField, \
     Manager, TextChoices, ForeignKey, SET_NULL, ManyToManyField, DateTimeField, BigIntegerField, CASCADE, PROTECT, \
     DateField

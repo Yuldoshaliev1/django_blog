@@ -87,9 +87,6 @@ class ResetPasswordForm(ModelForm):
         user.password = make_password(password)
         return user
 
-    # def is_valid(self):
-    #     return super().is_valid() and self.clean()
-
     class Meta:
         model = User
         fields = ('password',)

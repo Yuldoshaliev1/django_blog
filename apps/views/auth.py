@@ -13,7 +13,7 @@ from apps.forms import CustomLoginForm, RegisterForm, CreatePostForm, UserForm, 
 
 from apps.models import Category, Post, Comment, User
 from apps.utils import send_to_gmail, one_time_token
-#from apps.utils.sms import send, check
+
 
 
 class AccountSettingMixin(View):
@@ -144,6 +144,7 @@ class ResetPasswordView(AccountSettingMixin, UpdateView):
         return render(request, self.template_name)
 
 
+
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'apps/auth/profile.html'
     form_class = UserForm
@@ -208,28 +209,6 @@ class PreviewDetailFormPostView(LoginRequiredMixin, DetailView):
         context['comments'] = Comment.objects.filter(post__slug=self.request.path.split('/')[-1])
         return context
 
-#
-# class VerifySMSView(LoginRequiredMixin, TemplateView):
-#     template_name = 'apps/auth/change-password.html'
-#     login_url = reverse_lazy('login')
-#
-#     def post(self, request, *args, **kwargs):
-#         phone = request.POST.get('phone')
-#         if request.POST.get('send'):
-#             send(phone)
-#             user = request.user
-#             user.phone = phone
-#             user.save()
-#             return render(request, self.template_name, {'verify': 'ok'})
-#         elif request.POST.get('verify'):
-#             code = request.POST.get('code')
-#             if check(request.user.phone, code):
-#                 user = request.user
-#                 user.is_staff = True
-#                 user.save()
-#                 return render(request, self.template_name, {'verify': 'no', 'type': 'yes'})
-#             return render(request, self.template_name, {'verify': 'no', 'type': 'no'})
-#         return render(request, self.template_name, {'verify': 'no'})
 
 
 class DeleteAccountView(View):

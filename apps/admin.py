@@ -88,7 +88,7 @@ class AboutAdmin(ModelAdmin):
 class CommentAdmin(ModelAdmin):
     list_display = ('comment', 'author', 'post')
 
-    # readonly_fields = ('post', 'author', 'text')
+
 
     def comment(self, obj):
         return obj.text[:50] + '...'

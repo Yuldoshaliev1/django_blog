@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, FormView, TemplateView
 
 from apps.forms import CreateCommentForm, ContactForm
 from apps.models import Post, About, Comment, PostViewHistory, Category
-from apps.utils.page2pdf import render_to_pdf
+from apps.utils.make_pdf import render_to_pdf
 
 
 class SearchView(View):
@@ -29,15 +29,6 @@ class IndexView(ListView):
         context['posts'] = Post.active.all()[1:5]
         return context
 
-# class IndexView(ListView):
-#     queryset = Category.objects.all()
-#     context_object_name = 'categories'
-#     template_name = 'apps/index.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(object_list=object_list, **kwargs)
-#         context['posts'] = Post.active.all()[:4]
-#         return context
 
 
 class PostListView(ListView):
@@ -117,7 +108,7 @@ class DetailFormPostView(FormView, DetailView):
                 'author': request.user,
                 'text': request.POST.get('message'),
             }
-            # form = self.form_class(data)
+
             comment = Comment.objects.create(**data)
             comment.save()
         return redirect('post_form_detail', slug)
@@ -131,7 +122,7 @@ class GeneratePdf(DetailView):
         data = {
             'post': post,
         }
-        pdf = render_to_pdf('page2pdf.html', data)
+        pdf = render_to_pdf('make_pdf.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
 
 

@@ -14,7 +14,7 @@ urlpatterns = [
     path('profile', ProfileView.as_view(), name='profile'),
     path('change-password', ChangePasswordView.as_view(), name='change_password'),
     path('reset-password', ResetPasswordView.as_view(), name='reset_password'),
- #   path('profile/verify-phone/', VerifySMSView.as_view(), name='verify_phone'),
+
     path('profile/delete/', csrf_exempt(DeleteAccountView.as_view()), name='delete_account'),
 
     path('about', AboutView.as_view(), name='about'),
