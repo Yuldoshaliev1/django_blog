@@ -67,7 +67,7 @@ class PostAdmin(ModelAdmin):
     def make_pdf(self, obj: Post):
         return format_html(f'<a href="/pdf/{obj.id}"><input type="button" style="background-color: #4bbda6;" value="Make PDF"></a>')
 
-    def categories(self, obj: Post):  # NOQA
+    def categories(self, obj: Post):
         lst = []
         for i in obj.category.all():
             lst.append(f'''<a href="{reverse('admin:apps_category_change', args=(i.pk,))}">{i.name}</a>''')

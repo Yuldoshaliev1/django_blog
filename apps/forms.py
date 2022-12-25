@@ -72,20 +72,20 @@ class ChangePasswordForm(ModelForm):
 
 class ResetPasswordForm(ModelForm):
 
-    def clean(self):
-        password = self.data.get('password')
-        confirm_password = self.data.get('confirm_password')
-        if password != confirm_password:
-            raise ValidationError('Password did not match!')
-        try:
-            pk = force_str(urlsafe_base64_decode(self.data.get('user')))
-            user = User.objects.get(pk=pk)
-        except:
-            user = None
-        if not user:
-            raise ValidationError('User is not found on this server')
-        user.password = make_password(password)
-        return user
+    # def clean(self):
+    #     password = self.data.get('password')
+    #     confirm_password = self.data.get('confirm_password')
+    #     if password != confirm_password:
+    #         raise ValidationError('Password did not match!')
+    #     try:
+    #         pk = force_str(urlsafe_base64_decode(self.data.get('user')))
+    #         user = User.objects.get(pk=pk)
+    #     except:
+    #         user = None
+    #     if not user:
+    #         raise ValidationError('User is not found on this server')
+    #     user.password = make_password(password)
+    #     return user
 
     class Meta:
         model = User
