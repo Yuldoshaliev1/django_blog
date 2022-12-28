@@ -1,3 +1,7 @@
+import os
+
+import qrcode
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
@@ -5,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, FormView, TemplateView
 
 from apps.forms import CreateCommentForm, ContactForm
-from apps.models import Post, About, Comment, PostViewHistory, Category
+from apps.models import Post, About, Comment, PostViewHistory
 from apps.utils.make_pdf import render_to_pdf
 
 
@@ -28,7 +32,6 @@ class IndexView(ListView):
         context['url'] = reverse('category')
         context['posts'] = Post.active.all()[1:5]
         return context
-
 
 
 class PostListView(ListView):
@@ -119,8 +122,11 @@ class GeneratePdf(DetailView):
 
     def get(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs.get('pk'))
+        img = qrcode.make(f'{get_current_site(request)}/post/{post.slug}')
+        img.save(post.slug + '.png')
         data = {
             'post': post,
+            'qrcode': f'{os.getcwd()}/{post.slug}.png'
         }
         pdf = render_to_pdf('make_pdf.html', data)
         return HttpResponse(pdf, content_type='application/pdf')

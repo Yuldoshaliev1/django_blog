@@ -114,45 +114,45 @@ class ResetPasswordView(AccountSettingMixin, UpdateView):
     template_name = 'apps/auth/reset-password.html'
     success_url = reverse_lazy('login')
 
-    def get_object(self, queryset=None):
-        return self.request.user
-
-    def post(self, request, *args, **kwargs):
-        email = request.POST.get('email')
-        user = User.objects.get(email=email)
-        if user:
-            user.is_active = False
-            user.save()
-        return super().post(request, *args, **kwargs)
     # def get_object(self, queryset=None):
     #     return self.request.user
     #
     # def post(self, request, *args, **kwargs):
-    #     if 'save_password' in request.POST:
-    #         form = ResetPasswordForm(request.POST)
-    #         if form.is_valid():
-    #             form.save()
-    #         return redirect('login')
-    #
-    #     email = self.request.POST.get('email')
-    #     current_site = get_current_site(self.request)
-    #     if user := User.objects.get(email=email):
+    #     email = request.POST.get('email')
+    #     user = User.objects.get(email=email)
+    #     if user:
     #         user.is_active = False
     #         user.save()
-    #         send_to_gmail.apply_async(
-    #             args=[email, current_site.domain, 'reset'],
-    #             countdown=5
-    #         )
-    #         return render(request, self.template_name, {'type': 'valid'})
-    #     return super().post(self, request, *args, **kwargs)
-    #
-    # def get(self, request, *args, **kwargs):
-    #     if request.GET.get('uid64') and request.GET.get('token'):
-    #         if user := self.check_one_time_link(request.GET):
-    #             return render(request, self.template_name,
-    #                           {'reset_password_user': urlsafe_base64_encode(force_bytes(str(user.pk)))})
-    #         return render(request, self.template_name, {'type': 'expired'})
-    #     return render(request, self.template_name)
+    #     return super().post(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def post(self, request, *args, **kwargs):
+        if 'save_password' in request.POST:
+            form = ResetPasswordForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return redirect('login')
+
+        email = self.request.POST.get('email')
+        current_site = get_current_site(self.request)
+        if user := User.objects.get(email=email):
+            user.is_active = False
+            user.save()
+            send_to_gmail.apply_async(
+                args=[email, current_site.domain, 'reset'],
+                countdown=5
+            )
+            return render(request, self.template_name, {'type': 'valid'})
+        return super().post(self, request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('uid64') and request.GET.get('token'):
+            if user := self.check_one_time_link(request.GET):
+                return render(request, self.template_name,
+                              {'reset_password_user': urlsafe_base64_encode(force_bytes(str(user.pk)))})
+            return render(request, self.template_name, {'type': 'expired'})
+        return render(request, self.template_name)
 
 
 

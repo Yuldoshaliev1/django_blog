@@ -32,18 +32,15 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     'apps.apps.AppsConfig',
 
-    # Third-Party apps
     'ckeditor',
     'ckeditor_uploader',
     'fontawesomefree',
 
-    # social auth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.telegram',
 
 ]
 
@@ -196,7 +193,6 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
-# Additional configuration settings
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
@@ -248,4 +244,3 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = env('TIME_ZONE')
-

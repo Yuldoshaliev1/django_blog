@@ -30,7 +30,6 @@ def send_to_gmail(email, domain, _type='activation'):
 
     message = render_to_string(f'apps/auth/email_templates/{template}', context)
 
-    # from_email = EMAIL_HOST_USER
     recipient_list = [email]
 
     email = EmailMessage(subject, message, EMAIL_HOST_USER, recipient_list)
@@ -46,7 +45,6 @@ def send_to_contact(email):
     subject = 'Thanks so much for sharing your experience with us.'
     message = render_to_string('admin/custom/email_template.html', {})
 
-    # from_email = EMAIL_HOST_USER
     recipient_list = [email]
 
     email = EmailMessage(subject, message, EMAIL_HOST_USER, recipient_list)
