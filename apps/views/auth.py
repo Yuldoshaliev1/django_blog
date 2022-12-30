@@ -1,7 +1,7 @@
 from django.views import View
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login,  authenticate
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView
 from django.utils.encoding import force_str, force_bytes
@@ -16,7 +16,7 @@ from apps.utils import send_to_gmail, one_time_token
 
 
 
-class AccountSettingMixin(View):
+class AccountSetting(View):
     def check_one_time_link(self, data):
         uid64 = data.get('uid64')
         token = data.get('token')
@@ -109,7 +109,7 @@ class ChangePasswordView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class ResetPasswordView(AccountSettingMixin, UpdateView):
+class ResetPasswordView(AccountSetting, UpdateView):
     form_class = ResetPasswordForm
     template_name = 'apps/auth/reset-password.html'
     success_url = reverse_lazy('login')
@@ -174,7 +174,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class ActivateEmailView(AccountSettingMixin, TemplateView):
+class ActivateEmailView(AccountSetting, TemplateView):
     template_name = 'apps/auth/temp.html'
 
     def get(self, request, *args, **kwargs):
