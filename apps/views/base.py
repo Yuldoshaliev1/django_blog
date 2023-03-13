@@ -138,3 +138,22 @@ def entry_not_found(request, exception, template_name='404.html'):
 
 class InActiveView(TemplateView):
     template_name = 'apps/auth/inactive.html'
+
+#
+# def index(request, category_slug=None):
+#     if category_slug:
+#         products = Product.objects.filter(category__slug=category_slug)
+#     else:
+#         products = Product.objects.all()
+#
+#     page = request.GET.get('page', 1)
+#     paginator = Paginator(products, 3)  # 5 users per page
+#
+#     try:
+#         pagin = paginator.page(page)
+#     except:
+#         pagin = paginator.page(1)
+#     context = {
+#         'products': pagin
+#     }
+#     return render(request, 'app/index.html', context)
